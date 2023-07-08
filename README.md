@@ -1,3 +1,10 @@
+# Installation
+
+1. Download the plugin you want
+2. Go to your Turbohud folder (/Turbohud/Plugins/User)
+3. Paste the plugin there
+4. Reload Turbohud
+
 # Current Plugins Available
 
 ## MonsterOnmapDamageType
