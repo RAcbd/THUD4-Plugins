@@ -10,13 +10,13 @@
 ## MonsterOnmapDamageType
 + Shows monsters on the map and differentiates between Elite and Regular monsters.
 + Uses MonsterDamageType in colors to differentiate monster attack types
-    Cold: Blue
-    Fire: Red
-    Lightning: Yellow
-    Physical: Gray
-    Poison: Green
-    Shadow: Purple
-    None: White
+    - Cold: Blue
+    - Fire: Red
+    - Lightning: Yellow
+    - Physical: Gray
+    - Poison: Green
+    - Shadow: Purple
+    - None: White
   
 ![image](https://github.com/RAcbd/THUD4-Plugins/assets/22793295/f430432e-fb41-4d06-bd82-02c4162aa9ef)
 
