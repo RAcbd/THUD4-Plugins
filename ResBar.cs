@@ -224,8 +224,8 @@ public class ResourceBars : BasePlugin, IGameWorldPainter
         Services.Customization.RegisterFeature(CurrentValue);
         this.ReCalc();
 
-        this._hpBackground = Services.Render.GetTexture(SupportedTextureId.UIButtonLight_005);
-        this._resourceBackground = Services.Render.GetTexture(SupportedTextureId.UIButtonLight_005);
+        this._hpBackground = Services.Render.GetTexture(SupportedTextureId.UIButtonLight_134092211);
+        this._resourceBackground = Services.Render.GetTexture(SupportedTextureId.UIButtonLight_134092211);
     }
 
     private float _halfW;
