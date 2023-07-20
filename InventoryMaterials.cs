@@ -9,10 +9,10 @@ public class InventoryMaterials : BasePlugin, IGameUserInterfacePainter
     public float VerticalOffset { get; set; } = -7.3f;
     public float HorizontalOffset { get; set; } = 0.040f;
 
-    public ITexture Separator { get; } = Services.Render.GetTexture(SupportedTextureId.UIInventoryIcons_003, 255);
+    public ITexture Separator { get; } = Services.Render.GetTexture(SupportedTextureId.UICurrency06_996654672, 255);
     public IUIControl GamblingCurrencyValueTextControl { get; } = Services.UserInterface.RegisterControl("inventory_dialog_mainPage.InventoryContainer.Inventory_Currency_Gambling.Currencies_dynamictext");
 
-    private ITexture bgIcon { get; set; } = Services.Render.GetTexture(SupportedTextureId.UIChallengesCampaign01_028);
+    private ITexture bgIcon { get; set; } = Services.Render.GetTexture(SupportedTextureId.UIButtonLight_1449803639);
     private List<MaterialData> matList { get; set; } = new List<MaterialData>();
 
     public void PaintGameUserInterface(GameUserInterfaceLayer layer)
@@ -87,59 +87,27 @@ public class InventoryMaterials : BasePlugin, IGameUserInterfacePainter
 
     }
 
-    /*
-    type	rank	CurrencyType	Name	ItemSnoId	SupportedTextureId
-    1	1	CommonHerb	Gallowvine	ItemSnoId.CraftingMaterial_Herb_Common	SupportedTextureId.InventoryMaterials_004
-    1	2	RareHerb	Angelbreath	ItemSnoId.CraftingMaterial_Herb_Rare	SupportedTextureId.InventoryMaterials_000
-    1	3	SuperRareHerb	FiendRose	ItemSnoId.CraftingMaterial_Herb_SuperRare	SupportedTextureId.InventoryMaterials_003
-    1	4	ScosglenHerb	HowlerMoss	ItemSnoId.CraftingMaterial_Herb_Scosglen	SupportedTextureId.InventoryMaterials_032
-    1	5	FracturedPeaksHerb	Biteberry	ItemSnoId.CraftingMaterial_Herb_FracturedPeaks	SupportedTextureId.InventoryMaterials_001
-    1	6	DrySteppesHerb	Reddamine	ItemSnoId.CraftingMaterial_Herb_Drysteppes	SupportedTextureId.InventoryMaterials_006
-    1	7	HawezarHerb	Blightshade	ItemSnoId.CraftingMaterial_Herb_Hawezar	SupportedTextureId.InventoryMaterials_002
-    1	8	KehjistanHerb	Lifesbane	ItemSnoId.CraftingMaterial_Herb_Kehjistan	SupportedTextureId.InventoryMaterials_005
-
-    2	1	CommonOre	IronChunk	ItemSnoId.CraftingMaterial_Ore_Common	SupportedTextureId.InventoryMaterials_018
-    2	2	RareOre	SilverOre	ItemSnoId.CraftingMaterial_Ore_Rare	SupportedTextureId.InventoryMaterials_023
-    2	3	RareScatteredPrism	ScatteredPrism	ItemSnoId.CraftingMaterial_Rare_ScatteredPrism	SupportedTextureId.InventoryMaterials_022
-
-    3	1	CommonLeather	Rawhide	ItemSnoId.CraftingMaterial_Leather_Common	SupportedTextureId.InventoryMaterials_020
-    3	2	RareLeather	SuperiorLeather	ItemSnoId.CraftingMaterial_Leather_Rare	SupportedTextureId.InventoryMaterials_026
-
-    4	1	DemonHeart	DemonsHeart	ItemSnoId.CraftingMaterial_MonsterDrop_Demon_Heart	SupportedTextureId.InventoryMaterials_014
-    4	2	HumanTongue	Paletongue	ItemSnoId.CraftingMaterial_MonsterDrop_Human_Tongue	SupportedTextureId.InventoryMaterials_019
-    4	3	UndeadDust	GraveDust	ItemSnoId.CraftingMaterial_MonsterDrop_Undead_Dust	SupportedTextureId.InventoryMaterials_016
-    4	4	WildlifeBones	CrushedBeastBones	ItemSnoId.CraftingMaterial_MonsterDrop_Wildlife_Bones	SupportedTextureId.InventoryMaterials_013
-
-    5	1	SacredLegendarySalvage	ForgottenSoul	ItemSnoId.CraftingMaterial_Salvage_Sacred_Legendary	SupportedTextureId.InventoryMaterials_015
-    5	2	RareSalvage	VeiledCrystal	ItemSnoId.CraftingMaterial_Salvage_Rare	SupportedTextureId.InventoryMaterials_031
-    5	3	LegendaryArmorSalvage	CoilingWard	ItemSnoId.CraftingMaterial_Salvage_Legendary_Armor	SupportedTextureId.InventoryMaterials_012
-    5	4	LegendaryJewelrySalvage	AbstruseSigil	ItemSnoId.CraftingMaterial_Salvage_Legendary_Jewelry	SupportedTextureId.InventoryMaterials_008
-    5	5	SigilSalvage	SigilPowder	ItemSnoId.CraftingMaterial_Salvage_Nightmare_Sigil_Powder	SupportedTextureId.InventoryQuestNature_001
-    5	6	LegendaryWeaponSalvage	BalefulFragment	ItemSnoId.CraftingMaterial_Salvage_Legendary_Weapon	SupportedTextureId.InventoryMaterials_007
-
-    */
-
     public override string GetDescription() => Services.Translation.Translate(this, "display material summary at inventory");
 
     public override void Load()
     {
         base.Load();
 
-        matList.Add(new MaterialData(CurrencyType.SacredLegendarySalvage, ItemSnoId.CraftingMaterial_Salvage_Sacred_Legendary, SupportedTextureId.InventoryMaterials_015, 5, 1));
-        matList.Add(new MaterialData(CurrencyType.RareSalvage, ItemSnoId.CraftingMaterial_Salvage_Rare, SupportedTextureId.InventoryMaterials_031, 5, 2));
-        matList.Add(new MaterialData(CurrencyType.LegendaryArmorSalvage, ItemSnoId.CraftingMaterial_Salvage_Legendary_Armor, SupportedTextureId.InventoryMaterials_012, 5, 3));
-        matList.Add(new MaterialData(CurrencyType.LegendaryJewelrySalvage, ItemSnoId.CraftingMaterial_Salvage_Legendary_Jewelry, SupportedTextureId.InventoryMaterials_008, 5, 4));
-        matList.Add(new MaterialData(CurrencyType.SigilSalvage, ItemSnoId.CraftingMaterial_Salvage_Nightmare_Sigil_Powder, SupportedTextureId.InventoryQuestNature_001, 5, 5));
-        matList.Add(new MaterialData(CurrencyType.LegendaryWeaponSalvage, ItemSnoId.CraftingMaterial_Salvage_Legendary_Weapon, SupportedTextureId.InventoryMaterials_007, 5, 6));
-        matList.Add(new MaterialData(CurrencyType.CommonLeather, ItemSnoId.CraftingMaterial_Leather_Common, SupportedTextureId.InventoryMaterials_020, 5, 7));
-        matList.Add(new MaterialData(CurrencyType.RareLeather, ItemSnoId.CraftingMaterial_Leather_Rare, SupportedTextureId.InventoryMaterials_026, 5, 8));
-        matList.Add(new MaterialData(CurrencyType.DemonHeart, ItemSnoId.CraftingMaterial_MonsterDrop_Demon_Heart, SupportedTextureId.InventoryMaterials_014, 5, 9));
-        matList.Add(new MaterialData(CurrencyType.HumanTongue, ItemSnoId.CraftingMaterial_MonsterDrop_Human_Tongue, SupportedTextureId.InventoryMaterials_019, 5, 10));
-        matList.Add(new MaterialData(CurrencyType.UndeadDust, ItemSnoId.CraftingMaterial_MonsterDrop_Undead_Dust, SupportedTextureId.InventoryMaterials_016, 5, 11));
-        matList.Add(new MaterialData(CurrencyType.WildlifeBones, ItemSnoId.CraftingMaterial_MonsterDrop_Wildlife_Bones, SupportedTextureId.InventoryMaterials_013, 5, 12));
-        matList.Add(new MaterialData(CurrencyType.CommonOre, ItemSnoId.CraftingMaterial_Ore_Common, SupportedTextureId.InventoryMaterials_018, 5, 13));
-        matList.Add(new MaterialData(CurrencyType.RareOre, ItemSnoId.CraftingMaterial_Ore_Rare, SupportedTextureId.InventoryMaterials_023, 5, 14));
-        matList.Add(new MaterialData(CurrencyType.RareScatteredPrism, ItemSnoId.CraftingMaterial_Rare_ScatteredPrism, SupportedTextureId.InventoryMaterials_022, 5, 15));
+        matList.Add(new MaterialData(CurrencyType.SacredLegendarySalvage, ItemSnoId.CraftingMaterial_Salvage_Sacred_Legendary, SupportedTextureId.InventoryMaterials_3500380629, 5, 1));
+        matList.Add(new MaterialData(CurrencyType.RareSalvage, ItemSnoId.CraftingMaterial_Salvage_Rare, SupportedTextureId.InventoryMaterials_3796089172, 5, 2));
+        matList.Add(new MaterialData(CurrencyType.LegendaryArmorSalvage, ItemSnoId.CraftingMaterial_Salvage_Legendary_Armor, SupportedTextureId.InventoryMaterials_4037344621, 5, 3));
+        matList.Add(new MaterialData(CurrencyType.LegendaryJewelrySalvage, ItemSnoId.CraftingMaterial_Salvage_Legendary_Jewelry, SupportedTextureId.InventoryMaterials_2686035881, 5, 4));
+        matList.Add(new MaterialData(CurrencyType.SigilSalvage, ItemSnoId.CraftingMaterial_Salvage_Nightmare_Sigil_Powder, SupportedTextureId.InventoryQuestNature_1427923640, 5, 5));
+        matList.Add(new MaterialData(CurrencyType.LegendaryWeaponSalvage, ItemSnoId.CraftingMaterial_Salvage_Legendary_Weapon, SupportedTextureId.InventoryMaterials_329641371, 5, 6));
+        matList.Add(new MaterialData(CurrencyType.CommonLeather, ItemSnoId.CraftingMaterial_Leather_Common, SupportedTextureId.InventoryMaterials_1079277694, 5, 7));
+        matList.Add(new MaterialData(CurrencyType.RareLeather, ItemSnoId.CraftingMaterial_Leather_Rare, SupportedTextureId.InventoryMaterials_1293541336, 5, 8));
+        matList.Add(new MaterialData(CurrencyType.DemonHeart, ItemSnoId.CraftingMaterial_MonsterDrop_Demon_Heart, SupportedTextureId.InventoryMaterials_2490254900, 5, 9));
+        matList.Add(new MaterialData(CurrencyType.HumanTongue, ItemSnoId.CraftingMaterial_MonsterDrop_Human_Tongue, SupportedTextureId.InventoryMaterials_4187456782, 5, 10));
+        matList.Add(new MaterialData(CurrencyType.UndeadDust, ItemSnoId.CraftingMaterial_MonsterDrop_Undead_Dust, SupportedTextureId.InventoryMaterials_3926628815, 5, 11));
+        matList.Add(new MaterialData(CurrencyType.WildlifeBones, ItemSnoId.CraftingMaterial_MonsterDrop_Wildlife_Bones, SupportedTextureId.InventoryMaterials_500621934, 5, 12));
+        matList.Add(new MaterialData(CurrencyType.CommonOre, ItemSnoId.CraftingMaterial_Ore_Common, SupportedTextureId.InventoryMaterials_1744130859, 5, 13));
+        matList.Add(new MaterialData(CurrencyType.RareOre, ItemSnoId.CraftingMaterial_Ore_Rare, SupportedTextureId.InventoryMaterials_2822254805, 5, 14));
+        matList.Add(new MaterialData(CurrencyType.RareScatteredPrism, ItemSnoId.CraftingMaterial_Rare_ScatteredPrism, SupportedTextureId.InventoryMaterials_1769453156, 5, 15));
 
         TableSetting = new Feature()
         {
