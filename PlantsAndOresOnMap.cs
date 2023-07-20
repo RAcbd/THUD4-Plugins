@@ -4,28 +4,28 @@ namespace T4.Plugins.Raff
 {
     public class PlantsAndOresOnMapWithSlider : BasePlugin, IGameWorldPainter
     {
-        public ITexture Icon { get; } = Services.Render.GetTexture(SupportedTextureId.UIMinimapIcons_109, 255);
-        public ITexture GroundBorderTexture { get; } = Services.Render.GetTexture(SupportedTextureId.UIConsoleIcons_119, 160);
+        public ITexture Icon { get; } = Services.Render.GetTexture(SupportedTextureId.UIMinimapIcons_3008900674, 255);
+        public ITexture GroundBorderTexture { get; } = Services.Render.GetTexture(SupportedTextureId.UIConsoleIcons_380863977, 160);
         public float IconSize { get; set; } = 4.5f;
         public float GroundIconSize { get; set; } = 8.0f;
         public bool IsGroundIconSizeEnabled { get; set; } = true;
 
         private readonly Dictionary<ActorSnoId, ITexture> _textureMap = new()
         {
-            [ActorSnoId.HarvestNode_Herb_Common_Gallowvine] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_004),
-            [ActorSnoId.HarvestNode_Herb_Common_Gallowvine_PROLOGUE] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_004),
-            [ActorSnoId.HarvestNode_Herb_Frac_Biteberry] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_001),
-            [ActorSnoId.HarvestNode_Herb_Frac_Biteberry_PROLOGUE] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_001),
-            [ActorSnoId.HarvestNode_Herb_Hawe_Blightshade] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_002),
-            [ActorSnoId.HarvestNode_Herb_Kehj_Lifesbane] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_005),
-            [ActorSnoId.HarvestNode_Herb_Rare_Angelbreath] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_000),
-            [ActorSnoId.HarvestNode_Herb_Rare_FiendRose] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_003),
-            [ActorSnoId.HarvestNode_Herb_Scos_HowlerMoss] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_032),
-            [ActorSnoId.HarvestNode_Herb_Step_Reddamine] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_006),
-            [ActorSnoId.HarvestNode_Ore_Global_Common] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_018),
-            [ActorSnoId.HarvestNode_Ore_Global_Common_PROLOGUE] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_018),
-            [ActorSnoId.HarvestNode_Ore_Global_Rare] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_023),
-            [ActorSnoId.USZ_HarvestNode_Ore_UberSubzone_001_Dyn] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_022),
+            [ActorSnoId.HarvestNode_Herb_Common_Gallowvine] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_2828026198),
+            [ActorSnoId.HarvestNode_Herb_Common_Gallowvine_PROLOGUE] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_2828026198),
+            [ActorSnoId.HarvestNode_Herb_Frac_Biteberry] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_596336454),
+            [ActorSnoId.HarvestNode_Herb_Frac_Biteberry_PROLOGUE] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_596336454),
+            [ActorSnoId.HarvestNode_Herb_Hawe_Blightshade] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_1295260733),
+            [ActorSnoId.HarvestNode_Herb_Kehj_Lifesbane] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_3260105159),
+            [ActorSnoId.HarvestNode_Herb_Rare_Angelbreath] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_3636713627),
+            [ActorSnoId.HarvestNode_Herb_Rare_FiendRose] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_789225021),
+            [ActorSnoId.HarvestNode_Herb_Scos_HowlerMoss] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_3935934865),
+            [ActorSnoId.HarvestNode_Herb_Step_Reddamine] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_702554951),
+            [ActorSnoId.HarvestNode_Ore_Global_Common] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_1744130859),
+            [ActorSnoId.HarvestNode_Ore_Global_Common_PROLOGUE] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_1744130859),
+            [ActorSnoId.HarvestNode_Ore_Global_Rare] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_2822254805),
+            [ActorSnoId.USZ_HarvestNode_Ore_UberSubzone_001_Dyn] = Services.Render.GetTexture(SupportedTextureId.InventoryMaterials_1769453156),
         };
 
         private Dictionary<ActorSnoId, bool> ActorHashset;
