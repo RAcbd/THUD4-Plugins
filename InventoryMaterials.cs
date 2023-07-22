@@ -70,8 +70,10 @@ public class InventoryMaterials : BasePlugin, IGameUserInterfacePainter
             if (Services.Game.MyPlayer.Currencies.TryGetValue(Currency, out var count))
             {
                 string countText = (count >= 10000)
-                                   ? (count / 1000) + "k"
-                                   : ValueFormatter.ValueToString((long)count, ValueFormat.ShortNumber).Split('.')[0];
+                    ? (count / 1000) + "k"
+                    : (count >= 1000)
+                        ? ((count % 1000 == 0) ? $"{count / 1000}k" : $"{Math.Round(count / 1000d, 1)}k")
+                        : count.ToString("#,##0");
 
                 var tl = font.GetTextLayout(countText);
                 tl.DrawText(x + w - tl.Width, y + h - tl.Height);
