@@ -20,21 +20,42 @@ public class StatTrackers : BasePlugin, IGameUserInterfacePainter
             var xOffset = Services.Game.WindowWidth * w;
 
             CreateLabelForTotalTimeTracker(sessionTracker,
-                () => new System.Drawing.RectangleF(Services.Game.WindowHeight * w * 0, 0, Services.Game.WindowHeight * w, Services.Game.WindowHeight * h));
+                () => new System.Drawing.RectangleF(Services.Game.WindowWidth - (Services.Game.WindowWidth * w * 3), Services.Game.WindowHeight - (Services.Game.WindowHeight * h * 2), Services.Game.WindowWidth * w, Services.Game.WindowHeight * h));
 
             CreateLabelForPlayTimeTracker(sessionTracker,
-                () => new System.Drawing.RectangleF(Services.Game.WindowHeight * w * 1, 0, Services.Game.WindowHeight * w, Services.Game.WindowHeight * h));
+                () => new System.Drawing.RectangleF(Services.Game.WindowWidth - (Services.Game.WindowWidth * w * 2), Services.Game.WindowHeight - (Services.Game.WindowHeight * h * 2), Services.Game.WindowWidth * w, Services.Game.WindowHeight * h));
 
             CreateLabelForTownTimeTracker(sessionTracker,
-                () => new System.Drawing.RectangleF(Services.Game.WindowHeight * w * 2, 0, Services.Game.WindowHeight * w, Services.Game.WindowHeight * h));
+                () => new System.Drawing.RectangleF(Services.Game.WindowWidth - (Services.Game.WindowWidth * w), Services.Game.WindowHeight - (Services.Game.WindowHeight * h * 2), Services.Game.WindowWidth * w, Services.Game.WindowHeight * h));
 
             CreateLabelForTracker(sessionTracker,
-                () => new System.Drawing.RectangleF(Services.Game.WindowHeight * w * 0, Services.Game.WindowHeight * h, Services.Game.WindowHeight * w, Services.Game.WindowHeight * h));
+                () => new System.Drawing.RectangleF(Services.Game.WindowWidth - (Services.Game.WindowWidth * w * 3), Services.Game.WindowHeight - (Services.Game.WindowHeight * h), Services.Game.WindowWidth * w, Services.Game.WindowHeight * h));
 
             CreateLabelForGoldTracker(sessionTracker,
-                () => new System.Drawing.RectangleF(Services.Game.WindowHeight * w * 1, Services.Game.WindowHeight * h, Services.Game.WindowHeight * w, Services.Game.WindowHeight * h));
+                () => new System.Drawing.RectangleF(Services.Game.WindowWidth - (Services.Game.WindowWidth * w * 2), Services.Game.WindowHeight - (Services.Game.WindowHeight * h), Services.Game.WindowWidth * w, Services.Game.WindowHeight * h));
 
+            CreateLabelForTitle(sessionTracker,
+                () => new System.Drawing.RectangleF(Services.Game.WindowWidth - (Services.Game.WindowWidth * w), Services.Game.WindowHeight - (Services.Game.WindowHeight * h), Services.Game.WindowWidth * w, Services.Game.WindowHeight * h));
         }
+    }
+
+    private LabelComponent CreateLabelForTitle(IStatTracker expTracker, Func<System.Drawing.RectangleF> placementCalculator)
+    {
+        var titleComponent = new LabelComponent()
+        {
+            Placement = new DynamicComponentPlacement()
+            {
+                Calculator = placementCalculator,
+            },
+            NormalOpacity = 1.0f,
+            HighlightTestFunc = titleComponent => titleComponent.HitTest(Services.Game.CursorX, Services.Game.CursorY),
+            TextFunc = () => $"{expTracker.Title}",
+            HintFunc = () => "Session",
+        };
+
+        Components.Add(expTracker, titleComponent);
+
+        return titleComponent;
     }
 
     private LabelComponent CreateLabelForTracker(IStatTracker expTracker, Func<System.Drawing.RectangleF> placementCalculator)
