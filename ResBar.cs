@@ -3,31 +3,35 @@
 public class ResourceBars : BasePlugin, IGameWorldPainter
 {
     public Feature CurrentValue { get; private set; }
-    public bool IsResourceEnabled { get; private set; } = true;
+    public bool IsResourceEnabled { get; set; } = true;
 
-    public float Scale { get; private set; } = 1f;
-    public float VerticalOffset { get; private set; } = 0f;
+    public float Scale { get; private set; } = 0.73f;
+    public float VerticalOffset { get; private set; } = 61.702f;
     public float HorizontalOffset { get; private set; } = 0f;
 
     public float HorizontalPadding { get; private set; } = 2f;
     public float VerticalPadding { get; private set; } = 2f;
-    public float HpTextVerticalOffset { get; private set; } = 0f;
+    public float HpTextVerticalOffset { get; private set; } = 12.128f;
 
-    public float Width { get; private set; } = 300f;
-    public float Height { get; private set; } = 20f;
-    public float Divider { get; private set; } = 2f;
+    public float Width { get; private set; } = 271.915f;
+    public float Height { get; private set; } = 32.979f;
+    public float Divider { get; private set; } = 1.106f;
 
-    public bool ShowHPPercentage { get; private set; } = true;
-    public bool ShowResourcePercentage { get; private set; } = true;
+    public bool ShowHPPercentage { get; private set; } = false;
+    public bool ShowResourcePercentage { get; private set; } = false;
 
     public bool ShowHPText { get; private set; } = true;
     public bool ShowResourceText { get; private set; } = true;
 
+    private readonly Feature ResourceScale;
+    private readonly Feature ResourceFeature;
+    private readonly Feature ShowText;
+    private readonly Feature ShowPercentage;
+
     public IFillStyle HPColor { get; private set; } = Services.Render.GetFillStyle(200, 205, 15, 15);
     public IFillStyle ResourceColor { get; private set; } = Services.Render.GetFillStyle(200, 15, 196, 205);
 
-    public IFont CurrentFont = Services.Render.GetFont(255, 210, 210, 210, fontFamily: "times new roman", bold: false, size: 11, shadowMode: FontShadowMode.None);
-    public float FontSize { get; private set; } = 11f;
+    public float FontSize { get; private set; } = 9f;
 
     private ITexture _hpBackground;
     private ITexture _resourceBackground;
@@ -37,188 +41,84 @@ public class ResourceBars : BasePlugin, IGameWorldPainter
     public ResourceBars()
         : base(PluginCategory.Fight, "Displays player's HP and Resource bars")
     {
-        CurrentValue = new Feature()
-        {
-            Plugin = this,
-            NameOf = nameof(CurrentValue),
-            DisplayName = () => "Config",
-            Resources = new()
+        ResourceScale = AddFeature(nameof(ResourceScale), "Settings")
+            .AddFloatResource(nameof(Scale), "Scale", 0.5f, 2f,
+            getter: () => Scale,
+            setter: newValue =>
             {
-                new BooleanFeatureResource()
-                {
-                    NameOf = nameof(IsResourceEnabled),
-                    DisplayText = "Show resource bar",
-                    Getter = () => IsResourceEnabled,
-                    Setter = newValue => IsResourceEnabled = newValue,
-                },
-                new BooleanFeatureResource()
-                {
-                    NameOf = nameof(ShowHPText),
-                    DisplayText = "Show HP text",
-                    Getter = () => ShowHPText,
-                    Setter = newValue => ShowHPText = newValue,
-                },
-                new BooleanFeatureResource()
-                {
-                    NameOf = nameof(ShowResourceText),
-                    DisplayText = "Show resource text",
-                    Getter = () => ShowResourceText,
-                    Setter = newValue => ShowResourceText = newValue,
-                },
-                new BooleanFeatureResource()
-                {
-                    NameOf = nameof(ShowHPPercentage),
-                    DisplayText = "Show HP percentage",
-                    Getter = () => ShowHPPercentage,
-                    Setter = newValue => ShowHPPercentage = newValue,
-                },
-                new BooleanFeatureResource()
-                {
-                    NameOf = nameof(ShowResourcePercentage),
-                    DisplayText = "Show resource percentage",
-                    Getter = () => ShowResourcePercentage,
-                    Setter = newValue => ShowResourcePercentage = newValue,
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(Scale),
-                    DisplayText = "Scale",
-                    MinValue = 0.5f,
-                    MaxValue = 2f,
-                    Getter = () => Scale,
-                    Setter = newValue =>
-                    {
-                        Scale = newValue;
-                        this.ReCalc();
-                    },
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(FontSize),
-                    DisplayText = "Font Size",
-                    MinValue = 6,
-                    MaxValue = 24,
-                    Getter = () => FontSize,
-                    Setter = newValue =>
-                    {
-                        FontSize = newValue;
-                        this.ReCalc();
-                    },
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(HpTextVerticalOffset),
-                    DisplayText = "HP/Resource Text Vertical offset",
-                    MinValue = -50,
-                    MaxValue = 50,
-                    Getter = () => HpTextVerticalOffset,
-                    Setter = newValue =>
-                    {
-                        HpTextVerticalOffset = newValue;
-                    },
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(VerticalOffset),
-                    DisplayText = "Vertical offset",
-                    MinValue = -500,
-                    MaxValue = 500,
-                    Getter = () => VerticalOffset,
-                    Setter = newValue =>
-                    {
-                        VerticalOffset = newValue;
-                    },
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(HorizontalOffset),
-                    DisplayText = "Horizontal offset",
-                    MinValue = -500,
-                    MaxValue = 500,
-                    Getter = () => HorizontalOffset,
-                    Setter = newValue =>
-                    {
-                        HorizontalOffset = newValue;
-                    },
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(Width),
-                    DisplayText = "Bar width",
-                    MinValue = 100,
-                    MaxValue = 500,
-                    Getter = () => Width,
-                    Setter = newValue =>
-                    {
-                        Width = newValue;
-                        this.ReCalc();
-                    },
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(Height),
-                    DisplayText = "Bar height",
-                    MinValue = 10,
-                    MaxValue = 100,
-                    Getter = () => Height,
-                    Setter = newValue =>
-                    {
-                        Height = newValue;
-                        this.ReCalc();
-                    },
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(Divider),
-                    DisplayText = "Divider height",
-                    MinValue = 0,
-                    MaxValue = 10,
-                    Getter = () => Divider,
-                    Setter = newValue =>
-                    {
-                        Divider = newValue;
-                    },
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(HorizontalPadding),
-                    DisplayText = "Horizontal bar padding",
-                    MinValue = 0,
-                    MaxValue = 5,
-                    Getter = () => HorizontalPadding,
-                    Setter = newValue =>
-                    {
-                        HorizontalPadding = newValue;
-                        this.ReCalc();
-                    },
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(VerticalPadding),
-                    DisplayText = "Vertical bar padding",
-                    MinValue = 0,
-                    MaxValue = 5,
-                    Getter = () => VerticalPadding,
-                    Setter = newValue =>
-                    {
-                        VerticalPadding = newValue;
-                        this.ReCalc();
-                    },
-                },
-                new FillStyleFeatureResource()
-                {
-                    NameOf = nameof(HPColor),
-                    DisplayText = "HP color",
-                    FillStyle = this.HPColor,
-                },
-                new FillStyleFeatureResource()
-                {
-                    NameOf = nameof(ResourceColor),
-                    DisplayText = "Resource color",
-                    FillStyle = this.ResourceColor,
-                },
-            },
-        };
+                Scale = newValue;
+                this.ReCalc();
+            })
+            .AddFloatResource(nameof(FontSize), "Font Size", 6, 24,
+            getter: () => FontSize,
+            setter: newValue =>
+            {
+                FontSize = newValue;
+                this.ReCalc();
+            })
+            .AddFloatResource(nameof(HpTextVerticalOffset), "HP/Resource Text Veritical Offset", -50, 50,
+            getter: () => HpTextVerticalOffset,
+            setter: newValue => HpTextVerticalOffset = newValue)
+            .AddFloatResource(nameof(VerticalOffset), "Vertical Offset", -500, 500,
+            getter: () => VerticalOffset,
+            setter: newValue => VerticalOffset = newValue)
+            .AddFloatResource(nameof(HorizontalOffset), "Horizontal Offset", -500, 500,
+            getter: () => HorizontalOffset,
+            setter: newValue => HorizontalOffset = newValue)
+            .AddFloatResource(nameof(Width), "Bar Width", 100, 500,
+            getter: () => Width,
+            setter: newValue =>
+            {
+                Width = newValue;
+                this.ReCalc();
+            })
+            .AddFloatResource(nameof(Height), "Bar Height", 10, 100,
+            getter: () => Height,
+            setter: newValue =>
+            {
+                Height = newValue;
+                this.ReCalc();
+            })
+            .AddFloatResource(nameof(Divider), "Divider Height", 0, 10,
+            getter: () => Divider,
+            setter: newValue => Divider = newValue)
+            .AddFloatResource(nameof(HorizontalPadding), "Horizontal Bar Padding", 0, 5,
+            getter: () => HorizontalPadding,
+            setter: newValue =>
+            {
+                HorizontalPadding = newValue;
+                this.ReCalc();
+            })
+            .AddFloatResource(nameof(VerticalPadding), "Vertical Bar Padding", 0, 5,
+            getter: () => VerticalPadding,
+            setter: newValue =>
+            {
+                VerticalPadding = newValue;
+                this.ReCalc();
+            })
+            .AddFillStyleResource(nameof(HPColor), HPColor, "HP Color")
+            .AddFillStyleResource(nameof(ResourceColor), ResourceColor, "Resource Color");
+
+        ResourceFeature = AddFeature(nameof(ResourceFeature), "show Resource bar")
+            .AddBooleanResource(nameof(IsResourceEnabled), "show resource bar",
+            getter: () => IsResourceEnabled,
+            setter: newValue => IsResourceEnabled = newValue);
+
+        ShowText = AddFeature(nameof(ShowText), "Enable/Disable text")
+           .AddBooleanResource(nameof(ShowHPText), "show hp text",
+           getter: () => ShowHPText,
+           setter: newValue => ShowHPText = newValue)
+           .AddBooleanResource(nameof(ShowResourceText), "show resource text",
+           getter: () => ShowResourceText,
+           setter: newValue => ShowResourceText = newValue);
+
+        ShowPercentage = AddFeature(nameof(ShowPercentage), "Enable/Disable percentage")
+           .AddBooleanResource(nameof(ShowHPPercentage), "show hp percentage",
+           getter: () => ShowHPPercentage,
+           setter: newValue => ShowHPPercentage = newValue)
+           .AddBooleanResource(nameof(ShowResourcePercentage), "show resource percentage",
+           getter: () => ShowResourcePercentage,
+           setter: newValue => ShowResourcePercentage = newValue);
 
         this.ReCalc();
 
