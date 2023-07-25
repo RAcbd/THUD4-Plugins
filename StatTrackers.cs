@@ -5,7 +5,7 @@ public class StatTrackers : BasePlugin, IGameUserInterfacePainter
     public ComponentCollection<LabelComponent, IStatTracker> Components { get; } = new();
 
     public StatTrackers()
-        : base(PluginCategory.Fight, "show farming statistics at the top left corner")
+        : base(PluginCategory.Fight, "show farming statistics at the bottom right corner")
     {
         var w = 0.080f;
         var h = 0.020f;
