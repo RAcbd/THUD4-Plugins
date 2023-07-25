@@ -105,44 +105,16 @@ public class InventoryMaterials : BasePlugin, IGameUserInterfacePainter
         matList.Add(new MaterialData(CurrencyType.RareOre, ItemSnoId.CraftingMaterial_Ore_Rare, SupportedTextureId.InventoryMaterials_2822254805, 5, 14));
         matList.Add(new MaterialData(CurrencyType.RareScatteredPrism, ItemSnoId.CraftingMaterial_Rare_ScatteredPrism, SupportedTextureId.InventoryMaterials_1769453156, 5, 15));
 
-        TableSetting = new Feature()
-        {
-            Plugin = this,
-            NameOf = nameof(TableSetting),
-            DisplayName = () => "item count on tabs",
-            Resources = new() {
-                new FontFeatureResource() {
-                    NameOf = nameof(TextFont),
-                    DisplayText ="font",
-                    Font = TextFont,
-                },
-                new FloatFeatureResource() {
-                    NameOf = nameof(SizeMultiplier),
-                    DisplayText = "size",
-                    MinValue = 0.5f,
-                    MaxValue = 1f,
-                    Getter = () => SizeMultiplier,
-                    Setter = newValue => SizeMultiplier = MathF.Round(newValue, 1),
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(VerticalOffset),
-                    DisplayText = "vertical offset",
-                    MinValue = -100f,
-                    MaxValue = 100f,
-                    Getter = () => VerticalOffset,
-                    Setter = newValue => VerticalOffset = newValue,
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(HorizontalOffset),
-                    DisplayText = "horizontal offset",
-                    MinValue = -5,
-                    MaxValue = 5,
-                    Getter = () => HorizontalOffset,
-                    Setter = newValue => HorizontalOffset = newValue,
-                }
-            },
-        };
+        TableSetting = AddFeature(nameof(TableSetting), "Settings")
+            .AddFontResource(nameof(TextFont), TextFont, "Font")
+            .AddFloatResource(nameof(SizeMultiplier), "Size", 0.5f, 1f,
+                getter: () => SizeMultiplier,
+                setter: newValue => SizeMultiplier = newValue)
+            .AddFloatResource(nameof(VerticalOffset), "Vertical Offset", -100f, 100f,
+                getter: () => VerticalOffset,
+                setter: newValue => VerticalOffset = newValue)
+            .AddFloatResource(nameof(HorizontalOffset), "Horizontal Offset", -100f, 100f,
+                getter: () => HorizontalOffset,
+                setter: newValue => HorizontalOffset = newValue);
     }
 }

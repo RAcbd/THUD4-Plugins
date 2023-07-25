@@ -39,40 +39,16 @@ namespace T4.Plugins.Raff
         {
             ActorHashset = _textureMap.ToDictionary(x => x.Key, x => true);
 
-            IconOnMap = new Feature()
-            {
-                Plugin = this,
-                NameOf = nameof(IconOnMap),
-                DisplayName = () => "icon on map",
-                Resources = new()
-                {
-                    new FloatFeatureResource()
-                    {
-                        NameOf = nameof(IconSize),
-                        DisplayText = "icon size",
-                        MinValue = 1.0f,
-                        MaxValue = 11.0f,
-                        Getter = () => IconSize,
-                        Setter = newValue => IconSize = newValue,
-                    },
-                    new BooleanFeatureResource()
-                    {
-                        NameOf = nameof(IsGroundIconSizeEnabled),
-                        DisplayText = "ground size enabled",
-                        Getter = () => IsGroundIconSizeEnabled,
-                        Setter = newValue => IsGroundIconSizeEnabled = newValue,
-                    },
-                    new FloatFeatureResource()
-                    {
-                        NameOf = nameof(GroundIconSize),
-                        DisplayText = "ground size",
-                        MinValue = 1.0f,
-                        MaxValue = 8.0f,
-                        Getter = () => GroundIconSize,
-                        Setter = newValue => GroundIconSize = newValue,
-                    },
-                },
-            };
+            IconOnMap = AddFeature(nameof(IconOnMap), "Settings")
+                .AddBooleanResource(nameof(IsGroundIconSizeEnabled), "Show Ground Icon",
+                    getter: () => IsGroundIconSizeEnabled,
+                    setter: newValue => IsGroundIconSizeEnabled = newValue)
+                .AddFloatResource(nameof(IconSize), "Icon Size", 1.0f, 11.0f,
+                    getter: () => IconSize,
+                    setter: newValue => IconSize = newValue)
+                .AddFloatResource(nameof(GroundIconSize), "Ground Icon Size", 1.0f, 11.0f,
+                    getter: () => GroundIconSize,
+                    setter: newValue => GroundIconSize = newValue);
 
             foreach (var kvp in _textureMap)
             {
