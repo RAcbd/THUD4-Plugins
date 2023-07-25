@@ -4,13 +4,15 @@ public class MonsterOnMapDamageType : BasePlugin, IGameWorldPainter
 {
     public IFillStyle RegularFill { get; } = Services.Render.GetFillStyle(160, 255, 64, 64);
     public IFillStyle EliteFill { get; } = Services.Render.GetFillStyle(255, 64, 64, 255);
+
     public float RegularSize { get; set; } = 0.300f;
     public float EliteSize { get; set; } = 0.600f;
     public float FontSize { get; set; } = 6f;
 
-    public Feature RegularMonsterOnMap { get; private set; }
-    public Feature EliteMonsterOnMap { get; private set; }
     public bool ShowDamageTypeText { get; set; } = true;
+
+    private readonly Feature RegularMonsterOnMap;
+    private readonly Feature EliteMonsterOnMap;
 
     private Dictionary<MonsterAffixSnoId, ITexture> EliteAffixTextures { get; } = new();
 
@@ -27,65 +29,22 @@ public class MonsterOnMapDamageType : BasePlugin, IGameWorldPainter
 
     private Dictionary<DamageType, IFont> damageTypeFonts = new Dictionary<DamageType, IFont>();
 
-    public override string GetDescription() => Services.Translation.Translate(this, "show the nearby monsters on the map");
-
-    public override void Load()
+    public MonsterOnMapDamageType()
+        : base(PluginCategory.Fight, "show the nearby monsters and their damage type on the map")
     {
-        base.Load();
+        RegularMonsterOnMap = AddFeature(nameof(RegularMonsterOnMap), "regular monster on map")
+            .AddBooleanResource(nameof(ShowDamageTypeText), "show damage type text",
+            getter: () => ShowDamageTypeText,
+            setter: newValue => ShowDamageTypeText = newValue)
+            .AddFloatResource(nameof(RegularSize), "size", 0.1f, 1.1f,
+            getter: () => RegularSize,
+            setter: newValue => RegularSize = newValue);
 
-        RegularMonsterOnMap = new Feature()
-        {
-            Plugin = this,
-            NameOf = nameof(RegularMonsterOnMap),
-            DisplayName = () => Services.Translation.Translate(this, "regular monster on map"),
-            Resources = new()
-            {
-                new BooleanFeatureResource()
-                {
-                    NameOf = nameof(ShowDamageTypeText),
-                    DisplayText = () => Services.Translation.Translate(this, "show damage type text"),
-                    Getter = () => ShowDamageTypeText,
-                    Setter = newValue => ShowDamageTypeText = newValue,
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(RegularSize),
-                    DisplayText = () => Services.Translation.Translate(this, "size"),
-                    MinValue = 0.1f,
-                    MaxValue = 1.1f,
-                    Getter = () => RegularSize,
-                    Setter = newValue => RegularSize = newValue,
-                },
-            },
-        };
-
-        EliteMonsterOnMap = new Feature()
-        {
-            Plugin = this,
-            NameOf = nameof(EliteMonsterOnMap),
-            DisplayName = () => Services.Translation.Translate(this, "elite monster on map"),
-            Resources = new()
-            {
-                new FillStyleFeatureResource()
-                {
-                    NameOf = nameof(EliteFill),
-                    DisplayText = () => Services.Translation.Translate(this, "fill style"),
-                    FillStyle = EliteFill,
-                },
-                new FloatFeatureResource()
-                {
-                    NameOf = nameof(EliteSize),
-                    DisplayText = () => Services.Translation.Translate(this, "size"),
-                    MinValue = 0.1f,
-                    MaxValue = 1.1f,
-                    Getter = () => EliteSize,
-                    Setter = newValue => EliteSize = newValue,
-                },
-            },
-        };
-
-        Services.Customization.RegisterFeature(RegularMonsterOnMap);
-        Services.Customization.RegisterFeature(EliteMonsterOnMap);
+        EliteMonsterOnMap = AddFeature(nameof(EliteMonsterOnMap), "elite monster on map")
+            .AddFillStyleResource(nameof(EliteFill), EliteFill, "fill style")
+            .AddFloatResource(nameof(EliteSize), "size", 0.1f, 1.1f,
+                getter: () => EliteSize,
+                setter: newValue => EliteSize = newValue);
 
         InitializeDamageTypeFonts();
     }
@@ -112,17 +71,17 @@ public class MonsterOnMapDamageType : BasePlugin, IGameWorldPainter
 
         var hostileMonsters = Services.Game.Monsters.Where(x => !x.Untargetable && (x.Team == 19 || x.Team == 20)
             && x.World.WorldSno == Services.Map.MapWorldSno
-                                                                                    /*&& (x.MonsterData.ArcheType == null
-                                                                                        || (x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.ambient
-                                                                                            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.Mount
-                                                                                            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.NPC
-                                                                                            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.NPC_Prologue
-                                                                                            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.Assassin_Skills
-                                                                                            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.Barbarian_Skills
-                                                                                            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.Druid_Skills
-                                                                                            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.Necromancer_Skills
-                                                                                            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.Sorcerer_Skills
-                                                                                            ))*/);
+            /*&& (x.MonsterData.ArcheType == null
+            || (x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.ambient
+            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.Mount
+            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.NPC
+            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.NPC_Prologue
+            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.Assassin_Skills
+            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.Barbarian_Skills
+            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.Druid_Skills
+            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.Necromancer_Skills
+            && x.MonsterData.ArcheType.MonsterFamilySnoId != MonsterFamilySnoId.Sorcerer_Skills
+            ))*/);
 
         if (RegularMonsterOnMap.Enabled)
         {

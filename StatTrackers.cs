@@ -4,12 +4,9 @@ public class StatTrackers : BasePlugin, IGameUserInterfacePainter
 {
     public ComponentCollection<LabelComponent, IStatTracker> Components { get; } = new();
 
-    public override string GetDescription() => Services.Translation.Translate(this, "show farming statistics at the top left corner");
-
-    public override void Load()
+    public StatTrackers()
+        : base(PluginCategory.Fight, "show farming statistics at the top left corner")
     {
-        base.Load();
-
         var w = 0.080f;
         var h = 0.020f;
 

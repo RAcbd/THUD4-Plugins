@@ -4,8 +4,9 @@ public class InventoryMaterials : BasePlugin, IGameUserInterfacePainter
 {
     public Feature TableSetting { get; private set; }
 
-    public float SizeMultiplier { get; set; } = 0.50f;
     public IFont TextFont { get; set; } = Services.Render.GetFont(255, 255, 220, 220, fontFamily: "verdana", size: 7, shadowMode: FontShadowMode.Heavy);
+    
+    public float SizeMultiplier { get; set; } = 0.50f;
     public float VerticalOffset { get; set; } = -7.3f;
     public float HorizontalOffset { get; set; } = 0.040f;
 
@@ -85,12 +86,9 @@ public class InventoryMaterials : BasePlugin, IGameUserInterfacePainter
 
     }
 
-    public override string GetDescription() => Services.Translation.Translate(this, "display material summary at inventory");
-
-    public override void Load()
+    public InventoryMaterials()
+        : base(PluginCategory.Fight, "display material summary below inventory")
     {
-        base.Load();
-
         matList.Add(new MaterialData(CurrencyType.SacredLegendarySalvage, ItemSnoId.CraftingMaterial_Salvage_Sacred_Legendary, SupportedTextureId.InventoryMaterials_3500380629, 5, 1));
         matList.Add(new MaterialData(CurrencyType.RareSalvage, ItemSnoId.CraftingMaterial_Salvage_Rare, SupportedTextureId.InventoryMaterials_3796089172, 5, 2));
         matList.Add(new MaterialData(CurrencyType.LegendaryArmorSalvage, ItemSnoId.CraftingMaterial_Salvage_Legendary_Armor, SupportedTextureId.InventoryMaterials_4037344621, 5, 3));
@@ -111,16 +109,16 @@ public class InventoryMaterials : BasePlugin, IGameUserInterfacePainter
         {
             Plugin = this,
             NameOf = nameof(TableSetting),
-            DisplayName = () => Services.Translation.Translate(this, "item count on tabs"),
+            DisplayName = () => "item count on tabs",
             Resources = new() {
                 new FontFeatureResource() {
                     NameOf = nameof(TextFont),
-                    DisplayText = () => Services.Translation.Translate(this, "font"),
+                    DisplayText ="font",
                     Font = TextFont,
                 },
                 new FloatFeatureResource() {
                     NameOf = nameof(SizeMultiplier),
-                    DisplayText = () => Services.Translation.Translate(this, "size"),
+                    DisplayText = "size",
                     MinValue = 0.5f,
                     MaxValue = 1f,
                     Getter = () => SizeMultiplier,
@@ -129,7 +127,7 @@ public class InventoryMaterials : BasePlugin, IGameUserInterfacePainter
                 new FloatFeatureResource()
                 {
                     NameOf = nameof(VerticalOffset),
-                    DisplayText = () => Services.Translation.Translate(this, "vertical offset"),
+                    DisplayText = "vertical offset",
                     MinValue = -100f,
                     MaxValue = 100f,
                     Getter = () => VerticalOffset,
@@ -138,7 +136,7 @@ public class InventoryMaterials : BasePlugin, IGameUserInterfacePainter
                 new FloatFeatureResource()
                 {
                     NameOf = nameof(HorizontalOffset),
-                    DisplayText = () => Services.Translation.Translate(this, "horizontal offset"),
+                    DisplayText = "horizontal offset",
                     MinValue = -5,
                     MaxValue = 5,
                     Getter = () => HorizontalOffset,
@@ -146,7 +144,5 @@ public class InventoryMaterials : BasePlugin, IGameUserInterfacePainter
                 }
             },
         };
-
-        Services.Customization.RegisterFeature(TableSetting);
     }
 }

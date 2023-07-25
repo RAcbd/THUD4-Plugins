@@ -3,16 +3,12 @@
 public class PlayerStats : BasePlugin, IGameUserInterfacePainter
 {
     public ComponentCollection<LabelComponent, object> Components { get; } = new();
-    public override PluginCategory Category => PluginCategory.Fight;
-
-    public override string GetDescription() => Services.Translation.Translate(this, "show key player parameters above the ");
 
     public IFont Font = Services.Render.GetFont(192, 255, 255, 255, size: 6.5f);
 
-    public override void Load()
+    public PlayerStats()
+        : base(PluginCategory.Fight, "show key player stats above the action bar")
     {
-        base.Load();
-
         Components.Add(null, new LabelComponent()
         {
             Placement = new DynamicComponentPlacement()

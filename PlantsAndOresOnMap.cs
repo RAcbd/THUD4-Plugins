@@ -6,8 +6,10 @@ namespace T4.Plugins.Raff
     {
         public ITexture Icon { get; } = Services.Render.GetTexture(SupportedTextureId.UIMinimapIcons_3008900674, 255);
         public ITexture GroundBorderTexture { get; } = Services.Render.GetTexture(SupportedTextureId.UIConsoleIcons_380863977, 160);
+
         public float IconSize { get; set; } = 4.5f;
         public float GroundIconSize { get; set; } = 8.0f;
+
         public bool IsGroundIconSizeEnabled { get; set; } = true;
 
         private readonly Dictionary<ActorSnoId, ITexture> _textureMap = new()
@@ -32,25 +34,22 @@ namespace T4.Plugins.Raff
 
         public Feature IconOnMap { get; private set; }
 
-        public override string GetDescription() => Services.Translation.Translate(this, "show the nearby herbs/ores on the map");
-        public override PluginCategory Category => PluginCategory.Loot;
-
-        public override void Load()
+        public PlantsAndOresOnMapWithSlider()
+            : base(PluginCategory.Loot, "show the nearby herbs/ores on the map")
         {
-            base.Load();
             ActorHashset = _textureMap.ToDictionary(x => x.Key, x => true);
 
             IconOnMap = new Feature()
             {
                 Plugin = this,
                 NameOf = nameof(IconOnMap),
-                DisplayName = () => Services.Translation.Translate(this, "icon on map"),
+                DisplayName = () => "icon on map",
                 Resources = new()
                 {
                     new FloatFeatureResource()
                     {
                         NameOf = nameof(IconSize),
-                        DisplayText = () => Services.Translation.Translate(this, "icon size"),
+                        DisplayText = "icon size",
                         MinValue = 1.0f,
                         MaxValue = 11.0f,
                         Getter = () => IconSize,
@@ -59,14 +58,14 @@ namespace T4.Plugins.Raff
                     new BooleanFeatureResource()
                     {
                         NameOf = nameof(IsGroundIconSizeEnabled),
-                        DisplayText = () => Services.Translation.Translate(this, "ground size enabled"),
+                        DisplayText = "ground size enabled",
                         Getter = () => IsGroundIconSizeEnabled,
                         Setter = newValue => IsGroundIconSizeEnabled = newValue,
                     },
                     new FloatFeatureResource()
                     {
                         NameOf = nameof(GroundIconSize),
-                        DisplayText = () => Services.Translation.Translate(this, "ground size"),
+                        DisplayText = "ground size",
                         MinValue = 1.0f,
                         MaxValue = 8.0f,
                         Getter = () => GroundIconSize,
@@ -81,13 +80,11 @@ namespace T4.Plugins.Raff
                 IconOnMap.Resources.Add(new BooleanFeatureResource()
                 {
                     NameOf = actorSnoId.ToString(),
-                    DisplayText = () => Services.GameData.GetActorSno(actorSnoId).NameLocalized,
+                    DisplayText = Services.GameData.GetActorSno(actorSnoId).NameLocalized,
                     Getter = () => ActorHashset.TryGetValue(actorSnoId, out var enabled) && enabled,
                     Setter = newValue => ActorHashset[actorSnoId] = newValue,
                 });
             }
-
-            Services.Customization.RegisterFeature(IconOnMap);
         }
 
         public void PaintGameWorld(GameWorldLayer layer)

@@ -4,86 +4,85 @@ public class ResourceBars : BasePlugin, IGameWorldPainter
 {
     public Feature CurrentValue { get; private set; }
     public bool IsResourceEnabled { get; private set; } = true;
+
     public float Scale { get; private set; } = 1f;
     public float VerticalOffset { get; private set; } = 0f;
     public float HorizontalOffset { get; private set; } = 0f;
+
+    public float HorizontalPadding { get; private set; } = 2f;
+    public float VerticalPadding { get; private set; } = 2f;
+    public float HpTextVerticalOffset { get; private set; } = 0f;
 
     public float Width { get; private set; } = 300f;
     public float Height { get; private set; } = 20f;
     public float Divider { get; private set; } = 2f;
 
-    public float HorizontalPadding { get; private set; } = 2f;
-    public float VerticalPadding { get; private set; } = 2f;
+    public bool ShowHPPercentage { get; private set; } = true;
+    public bool ShowResourcePercentage { get; private set; } = true;
+
+    public bool ShowHPText { get; private set; } = true;
+    public bool ShowResourceText { get; private set; } = true;
 
     public IFillStyle HPColor { get; private set; } = Services.Render.GetFillStyle(200, 205, 15, 15);
     public IFillStyle ResourceColor { get; private set; } = Services.Render.GetFillStyle(200, 15, 196, 205);
 
     public IFont CurrentFont = Services.Render.GetFont(255, 210, 210, 210, fontFamily: "times new roman", bold: false, size: 11, shadowMode: FontShadowMode.None);
     public float FontSize { get; private set; } = 11f;
-    public float HpTextVerticalOffset { get; private set; } = 0f;
-
-    public bool ShowHPPercentage { get; private set; } = true;
-    public bool ShowResourcePercentage { get; private set; } = true;
-    public bool ShowHPText { get; private set; } = true;
-    public bool ShowResourceText { get; private set; } = true;
 
     private ITexture _hpBackground;
     private ITexture _resourceBackground;
 
     public float CurrentHP { get; private set; }
 
-    public override string GetDescription() =>
-        Services.Translation.Translate(this, "Displays player's HP and Resource bars");
-
-    public override void Load()
+    public ResourceBars()
+        : base(PluginCategory.Fight, "Displays player's HP and Resource bars")
     {
-        base.Load();
         CurrentValue = new Feature()
         {
             Plugin = this,
             NameOf = nameof(CurrentValue),
-            DisplayName = () => Services.Translation.Translate(this, "Config"),
+            DisplayName = () => "Config",
             Resources = new()
             {
                 new BooleanFeatureResource()
                 {
                     NameOf = nameof(IsResourceEnabled),
-                    DisplayText = () => Services.Translation.Translate(this, "Show resource bar"),
+                    DisplayText = "Show resource bar",
                     Getter = () => IsResourceEnabled,
                     Setter = newValue => IsResourceEnabled = newValue,
                 },
                 new BooleanFeatureResource()
                 {
                     NameOf = nameof(ShowHPText),
-                    DisplayText = () => Services.Translation.Translate(this, "Show HP text"),
+                    DisplayText = "Show HP text",
                     Getter = () => ShowHPText,
                     Setter = newValue => ShowHPText = newValue,
                 },
                 new BooleanFeatureResource()
                 {
                     NameOf = nameof(ShowResourceText),
-                    DisplayText = () => Services.Translation.Translate(this, "Show resource text"),
+                    DisplayText = "Show resource text",
                     Getter = () => ShowResourceText,
                     Setter = newValue => ShowResourceText = newValue,
                 },
                 new BooleanFeatureResource()
                 {
                     NameOf = nameof(ShowHPPercentage),
-                    DisplayText = () => Services.Translation.Translate(this, "Show HP percentage"),
+                    DisplayText = "Show HP percentage",
                     Getter = () => ShowHPPercentage,
                     Setter = newValue => ShowHPPercentage = newValue,
                 },
                 new BooleanFeatureResource()
                 {
                     NameOf = nameof(ShowResourcePercentage),
-                    DisplayText = () => Services.Translation.Translate(this, "Show resource percentage"),
+                    DisplayText = "Show resource percentage",
                     Getter = () => ShowResourcePercentage,
                     Setter = newValue => ShowResourcePercentage = newValue,
                 },
                 new FloatFeatureResource()
                 {
                     NameOf = nameof(Scale),
-                    DisplayText = () => Services.Translation.Translate(this, "Scale"),
+                    DisplayText = "Scale",
                     MinValue = 0.5f,
                     MaxValue = 2f,
                     Getter = () => Scale,
@@ -96,7 +95,7 @@ public class ResourceBars : BasePlugin, IGameWorldPainter
                 new FloatFeatureResource()
                 {
                     NameOf = nameof(FontSize),
-                    DisplayText = () => Services.Translation.Translate(this, "Font Size"),
+                    DisplayText = "Font Size",
                     MinValue = 6,
                     MaxValue = 24,
                     Getter = () => FontSize,
@@ -109,7 +108,7 @@ public class ResourceBars : BasePlugin, IGameWorldPainter
                 new FloatFeatureResource()
                 {
                     NameOf = nameof(HpTextVerticalOffset),
-                    DisplayText = () => Services.Translation.Translate(this, "HP/Resource Text Vertical offset"),
+                    DisplayText = "HP/Resource Text Vertical offset",
                     MinValue = -50,
                     MaxValue = 50,
                     Getter = () => HpTextVerticalOffset,
@@ -121,7 +120,7 @@ public class ResourceBars : BasePlugin, IGameWorldPainter
                 new FloatFeatureResource()
                 {
                     NameOf = nameof(VerticalOffset),
-                    DisplayText = () => Services.Translation.Translate(this, "Vertical offset"),
+                    DisplayText = "Vertical offset",
                     MinValue = -500,
                     MaxValue = 500,
                     Getter = () => VerticalOffset,
@@ -133,7 +132,7 @@ public class ResourceBars : BasePlugin, IGameWorldPainter
                 new FloatFeatureResource()
                 {
                     NameOf = nameof(HorizontalOffset),
-                    DisplayText = () => Services.Translation.Translate(this, "Horizontal offset"),
+                    DisplayText = "Horizontal offset",
                     MinValue = -500,
                     MaxValue = 500,
                     Getter = () => HorizontalOffset,
@@ -145,7 +144,7 @@ public class ResourceBars : BasePlugin, IGameWorldPainter
                 new FloatFeatureResource()
                 {
                     NameOf = nameof(Width),
-                    DisplayText = () => Services.Translation.Translate(this, "Bar width"),
+                    DisplayText = "Bar width",
                     MinValue = 100,
                     MaxValue = 500,
                     Getter = () => Width,
@@ -158,7 +157,7 @@ public class ResourceBars : BasePlugin, IGameWorldPainter
                 new FloatFeatureResource()
                 {
                     NameOf = nameof(Height),
-                    DisplayText = () => Services.Translation.Translate(this, "Bar height"),
+                    DisplayText = "Bar height",
                     MinValue = 10,
                     MaxValue = 100,
                     Getter = () => Height,
@@ -171,7 +170,7 @@ public class ResourceBars : BasePlugin, IGameWorldPainter
                 new FloatFeatureResource()
                 {
                     NameOf = nameof(Divider),
-                    DisplayText = () => Services.Translation.Translate(this, "Divider height"),
+                    DisplayText = "Divider height",
                     MinValue = 0,
                     MaxValue = 10,
                     Getter = () => Divider,
@@ -183,7 +182,7 @@ public class ResourceBars : BasePlugin, IGameWorldPainter
                 new FloatFeatureResource()
                 {
                     NameOf = nameof(HorizontalPadding),
-                    DisplayText = () => Services.Translation.Translate(this, "Horizontal bar padding"),
+                    DisplayText = "Horizontal bar padding",
                     MinValue = 0,
                     MaxValue = 5,
                     Getter = () => HorizontalPadding,
@@ -196,7 +195,7 @@ public class ResourceBars : BasePlugin, IGameWorldPainter
                 new FloatFeatureResource()
                 {
                     NameOf = nameof(VerticalPadding),
-                    DisplayText = () => Services.Translation.Translate(this, "Vertical bar padding"),
+                    DisplayText = "Vertical bar padding",
                     MinValue = 0,
                     MaxValue = 5,
                     Getter = () => VerticalPadding,
@@ -209,19 +208,18 @@ public class ResourceBars : BasePlugin, IGameWorldPainter
                 new FillStyleFeatureResource()
                 {
                     NameOf = nameof(HPColor),
-                    DisplayText = () => Services.Translation.Translate(this, "HP color"),
+                    DisplayText = "HP color",
                     FillStyle = this.HPColor,
                 },
                 new FillStyleFeatureResource()
                 {
                     NameOf = nameof(ResourceColor),
-                    DisplayText = () => Services.Translation.Translate(this, "Resource color"),
+                    DisplayText = "Resource color",
                     FillStyle = this.ResourceColor,
                 },
             },
         };
 
-        Services.Customization.RegisterFeature(CurrentValue);
         this.ReCalc();
 
         this._hpBackground = Services.Render.GetTexture(SupportedTextureId.UIButtonLight_134092211);
